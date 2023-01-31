@@ -7,79 +7,44 @@ import no.hvl.dat110.TODO;
 public class MessageUtils {
 
 	public static final int SEGMENTSIZE = 128;
-
 	public static int MESSAGINGPORT = 8080;
 	public static String MESSAGINGHOST = "localhost";
 
+//	takes a Message as parameter and returns a segment, encapsulated with payload length and padding
 	public static byte[] encapsulate(Message message) {
 
+//		setting the length of the segment to 128bytes
 		byte[] segment=new byte[SEGMENTSIZE];
 		byte[] data;
 
-		// TODO - START
-
-		// encapulate/encode the payload data of the message and form a segment
-		// according to the segment format for the messaging layer
+//		saving the message byte[] to data
 		data = message.getData();
 
-//		setting first byte if segment as the payload
-//		segment[0] = message.getPayloadIndex(); //
-//		trying again:
-
-//		this.data = Arrays.copyOf(data,data.length);
-
-//		segment = Arrays.copyOf(data,127);
+//		setting the length of payload as header (index 0)
 		segment[0]= (byte) data.length;
+
+//		adding the payload to the segment, from index 1 and forward
 		int i=0;
 		while(i<data.length){
 			segment[i + 1] = data[i];
 			i++;
 		}
 
-
-//		copy data into segment from index 1
-//		for (int i = 0; i < 127; i++) {
-//			segment[i + 1] = data[i];
-//		}
-//		segment = Arrays.copyOfRange(data,0,127);
-
-
-//		if (true)
-//			throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - END
 		return segment;
-
 	}
 
+//	takes a segment as parameter and returns a message, decapsulating down to the payload
 	public static Message decapsulate(byte[] segment) {
 
-		Message message=null;
-		byte[] temp=new byte[segment[0]];
-		
-//		 TODO - START
-		// decapsulate segment and put received payload data into a message
-//		byte[] seg=segment;
+//		new array with the length of payload (saved as segment header)
+		byte[] data=new byte[segment[0]];
 
+//		adding the payload from segment to data[]
 		for(int i=0;i<segment[0];i++){
-			temp[i]=segment[i+1];
+			data[i]=segment[i+1];
 		}
-//		while(segment[i]!=null){
-//			temp[i-1]=segment[i];
-//			i++;
-//		}
-		message = new Message(temp);
-//		take byte[] segment as param
-//		from index 1, copy into message
-//		message.setData(Arrays.copyOfRange(segment, 1,127));
-//		wrong, copies whole array instead of just payload
-
-//		if (true)
-//			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		
-		return message;
+//		returning a new message with the payload (data) as parameter
+		return new Message(data);
 		
 	}
 	
