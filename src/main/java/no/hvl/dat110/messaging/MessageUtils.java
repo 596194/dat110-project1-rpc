@@ -36,7 +36,7 @@ public class MessageUtils {
 //	takes a segment as parameter and returns a message, decapsulating down to the payload
 	public static Message decapsulate(byte[] segment) {
 
-//		new array with the length of payload (saved as segment header)
+//		new array with the length of payload (value from segment header)
 		byte[] data=new byte[segment[0]];
 
 //		adding the payload from segment to data[]
