@@ -8,6 +8,8 @@ import java.net.Socket;
 
 import no.hvl.dat110.TODO;
 
+import static no.hvl.dat110.messaging.MessageUtils.SEGMENTSIZE;
+
 
 public class MessageConnection {
 
@@ -31,34 +33,40 @@ public class MessageConnection {
 			ex.printStackTrace();
 		}
 	}
-
+	// encapsulate the data contained in the Message and write to the output stream
 	public void send(Message message) {
 
 		byte[] data;
-		
-		// TODO - START
-		// encapsulate the data contained in the Message and write to the output stream
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-			
-		// TODO - END
+
+//		encapsulates the parameter Message and saves it in variable data
+		data = MessageUtils.encapsulate(message);
+
+//		send with using write on the outStream
+		try{
+			outStream.write(data);
+		}
+		catch(IOException ex){
+
+		}
 
 	}
 
+	// read a segment from the input stream and decapsulate data into a Message
 	public Message receive() {
 
 		Message message = null;
-		byte[] data;
-		
-		// TODO - START
-		// read a segment from the input stream and decapsulate data into a Message
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		
+		byte[] data = new byte[SEGMENTSIZE];
+
+//		reading from inStream and decapsulating, returning the message
+		try{
+//			read overwrites bytes[] data with what is read from the instream data
+			inStream.read(data);
+			message = MessageUtils.decapsulate(data);
+		}
+		catch(IOException ex){
+
+		}
+
 		return message;
 		
 	}
