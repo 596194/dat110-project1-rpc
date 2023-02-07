@@ -5,6 +5,7 @@ import java.util.HashMap;
 import no.hvl.dat110.TODO;
 import no.hvl.dat110.messaging.MessageConnection;
 import no.hvl.dat110.messaging.Message;
+import no.hvl.dat110.messaging.MessageUtils;
 import no.hvl.dat110.messaging.MessagingServer;
 
 public class RPCServer {
@@ -38,31 +39,29 @@ public class RPCServer {
 		
 		while (!stop) {
 	    
-		   byte rpcid = 0;
 		   Message requestmsg=null,replymsg;
 
 		   // - receive a Message containing an RPC request
-
 			requestmsg=connection.receive();
 
-
-
 		   // - extract the identifier for the RPC method to be invoked from the RPC request
-			rpcid=requestmsg.getData()[0];
+			byte rpcid=requestmsg.getData()[0];
 
 		   // - lookup the method to be invoked
-			RPCRemoteImpl impl = services.get(rpcid);
+			RPCRemoteImpl methodInvoked = services.get(rpcid);
+
+			// - decapsulate the message and invoke the method on the payload
+			byte[] reply = methodInvoked.invoke(RPCUtils.decapsulate(requestmsg.getData()));
 
 
-		   // - invoke the method
-			replymsg=impl.invoke("payload");
+			// - saving the result from invoked method to a new message
+			replymsg=new Message(reply);
+
+			//encapsulate the new message
+			MessageUtils.encapsulate(replymsg);
 
 			// - send back the message containing RPC reply
-
 			connection.send(replymsg);
-
-
-		   // TODO - END
 
 			// stop the server if it was stop methods that was called
 		   if (rpcid == RPCCommon.RPIDSTOP) {

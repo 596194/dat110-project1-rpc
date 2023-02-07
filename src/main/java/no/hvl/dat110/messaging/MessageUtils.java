@@ -15,12 +15,16 @@ public class MessageUtils {
 
 //		setting the length of the segment to 128bytes
 		byte[] segment=new byte[SEGMENTSIZE];
-		byte[] data;
 
 //		saving the message byte[] to data
-		data = message.getData();
+		byte[] data = message.getData();
 
-//		setting the length of payload as header (index 0)
+//		test
+//		for (int i=0;i<;i++){
+//
+//		}
+
+//		setting the length of payload as header (index 0 = length)
 		segment[0]= (byte) data.length;
 
 //		adding the payload to the segment, from index 1 and forward
@@ -40,6 +44,7 @@ public class MessageUtils {
 		byte[] data=new byte[segment[0]];
 
 //		adding the payload from segment to data[]
+
 		for(int i=0;i<segment[0];i++){
 			data[i]=segment[i+1];
 		}

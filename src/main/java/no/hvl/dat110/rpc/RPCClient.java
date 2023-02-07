@@ -36,26 +36,18 @@ public class RPCClient {
 	 method to be called param is the marshalled parameter of the method to be called
 	 */
 	public byte[] call(byte rpcid, byte[] param) {
-		
-		byte[] returnval = null;
-		
-		// TODO - START
-
-
-
 //		The rpcid and param must be encapsulated according to the RPC message format
-//		returnval = RPCUtils.encapsulate(rpcid,param);
+//		Sending on the connection a message with payload encapsulated in rpcid
+		connection.send(new Message(RPCUtils.encapsulate(rpcid,param)));//sends a message
 
 //		The return value from the RPC call must be decapsulated according to the RPC message format
+//		Saving the received(and decapsulated) message in returnMsg
+		Message returnMsg = connection.receive(); //receive also decapsulates
+
+//		return RPCUtils.decapsulate(returnMsg.getData());
+		return returnMsg.getData();
 
 
-				
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		return returnval;
-		
 	}
 
 }

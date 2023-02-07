@@ -13,31 +13,36 @@ public class RPCUtils {
 	// include a byte that specifies what method used - string, int and so on?
 	public static byte[] encapsulate(byte rpcid, byte[] payload) {
 //		declaring rpcmsg with size 128
-		byte[] rpcmsg = new byte[SEGMENTSIZE];
+		byte[] rpcmsg = new byte[payload.length+1];
 
 //		index 0 specifies what method used
 		rpcmsg[0]=rpcid;
 
 //		index 1-> is the payload
-		int i=0;
-		while(i<payload.length){
-			rpcmsg[i + 1] = payload[i];
-			i++;
-		}
+		System.arraycopy(payload,0,rpcmsg,1,payload.length);
+//		int i=0;
+//		while(i<payload.length){
+//			rpcmsg[i + 1] = payload[i];
+//			i++;
+//		}
 		return rpcmsg;
 	}
 	// Decapsulate the rpcid and payload in a byte array according to the RPC message syntax
 	public static byte[] decapsulate(byte[] rpcmsg) {
 //		saves rpcmsg as rpcmsgIn to be able to use it
-		byte[] rpcmsgIn=rpcmsg;
+//		byte[] rpcmsgIn=rpcmsg;
 
 //		declares payload as new byte[] with length to rpcmsgIn-1
-		byte[] payload = new byte[rpcmsgIn.length-1];
+		if(rpcmsg.length==0){
+			return new byte[0];
+		}
+		byte[] payload = new byte[rpcmsg.length-1];
 
 //		for loop to copy from rpcmsgIn[i+1] to payload[i]
-		for(int i=0;i<rpcmsgIn.length-1;i++){
-			payload[i]=rpcmsgIn[i+1];
-		}
+		System.arraycopy(rpcmsg, 1, payload,0,payload.length);
+//		for(int i=0;i<rpcmsg.length-1;i++){
+//			payload[i]=rpcmsg[i+1];
+//		}
 		
 		return payload;
 		
@@ -56,10 +61,8 @@ public class RPCUtils {
 	}
 	
 	public static byte[] marshallVoid() {
-		
-		byte[] encoded = new byte[0];
-		
-		return encoded;
+
+		return new byte[0];
 	}
 	
 	public static void unmarshallVoid(byte[] data) {

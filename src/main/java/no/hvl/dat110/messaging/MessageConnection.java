@@ -60,8 +60,10 @@ public class MessageConnection {
 //		reading from inStream and decapsulating, returning the message
 		try{
 //			"read" reads from inStream to its parameter, here data
-			inStream.read(data);
+			inStream.readFully(data);
+
 			message = MessageUtils.decapsulate(data);
+
 		}
 		catch(IOException ex){
 
