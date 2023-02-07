@@ -59,7 +59,7 @@ public class MessageConnection {
 
 //		reading from inStream and decapsulating, returning the message
 		try{
-//			read overwrites bytes[] data with what is read from the instream data
+//			"read" reads from inStream to its parameter, here data
 			inStream.read(data);
 			message = MessageUtils.decapsulate(data);
 		}
